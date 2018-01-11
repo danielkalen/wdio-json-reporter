@@ -71,19 +71,20 @@ var JsonReporter = (function (_events$EventEmitter) {
             var output, data, stats;
             this.on('start', function (data) {
                 output = ['start', {}];
-                console.log(output);
+                console.log(JSON.stringify(output));
             });
             this.on('end', function () {
                 stats = _this.baseReporter.stats;
-                data = ({ start: stats.start, end: stats.end, duration: stats._duration })[('suites', 'tests', 'passes', 'failures', 'pending')].forEach(function (item) {
+                data = { start: stats.start, end: stats.end, duration: stats._duration };
+                ['suites', 'tests', 'passes', 'failures', 'pending'].forEach(function (item) {
                     return data[item] = stats.counts[item];
                 });
                 output = ['end', data];
-                console.log(output);
+                console.log(JSON.stringify(output));
             });
             this.on('suite:start', function (data) {
                 output = ['suite', { title: data.title, fullTitle: data.fullTitle, parent: data.parent }];
-                console.log(output);
+                console.log(JSON.stringify(output));
             });
             this.on('test:end', function (arg) {
                 stats = baseReporter.stats.runners[arg.cid].specs[arg.specHash].suites[arg.parentUid].tests[arg.uid];
@@ -95,7 +96,7 @@ var JsonReporter = (function (_events$EventEmitter) {
                     data.actual = stats.error.actual;
                 }
                 output = [stats.state, data];
-                console.log(output);
+                console.log(JSON.stringify(output));
             });
         } else {
             this.on('end', function () {
